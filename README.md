@@ -72,7 +72,7 @@ The form validates and posts to `/api/contact`. Without `RESEND_API_KEY`, submis
 
 ```env
 RESEND_API_KEY=re_...
-CONTACT_TO_EMAIL=hamzasalih7y@gmail.com
+CONTACT_TO_EMAIL=hamzasalihksa7@gmail.com
 CONTACT_FROM_EMAIL=Portfolio Contact <onboarding@resend.dev>
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```

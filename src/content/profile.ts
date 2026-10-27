@@ -3,7 +3,7 @@ import type { Locale } from "@/i18n/config";
 const shared = {
   name: "Hamza Salih",
   monogram: "HS",
-  email: "hamzasalih7y@gmail.com",
+  email: "hamzasalihksa7@gmail.com",
   phoneDisplay: "+966 50 793 1628",
   phoneE164: "966507931628",
   linkedin: "https://www.linkedin.com/in/hamza-salih-42b608176/",
