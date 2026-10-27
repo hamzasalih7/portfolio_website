@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { profile } from "@/content/profile";
+import { profileContact } from "@/content/profile";
 
 const schema = z.object({
   name: z.string().trim().min(2).max(120),
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
   const payload = parsed.data;
   const resendKey = process.env.RESEND_API_KEY;
-  const toEmail = process.env.CONTACT_TO_EMAIL ?? profile.email;
+  const toEmail = process.env.CONTACT_TO_EMAIL ?? profileContact.email;
   const fromEmail =
     process.env.CONTACT_FROM_EMAIL ?? "Portfolio Contact <onboarding@resend.dev>";
 
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         message:
-            `The contact form is installed, but email delivery is not configured yet. Please email ${profile.email} or message on WhatsApp. (Developer: set RESEND_API_KEY in .env.local — see README.)`,
+            `The contact form is installed, but email delivery is not configured yet. Please email ${profileContact.email} or message on WhatsApp. (Developer: set RESEND_API_KEY in .env.local — see README.)`,
       },
       { status: 503 },
     );

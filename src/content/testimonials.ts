@@ -1,6 +1,7 @@
+import type { Locale } from "@/i18n/config";
+
 /**
- * Testimonials are disabled until you have real, permissioned feedback.
- * Set enabled: true on individual items and showSection: true when ready.
+ * Testimonials stay hidden until real, permissioned feedback exists.
  */
 
 export type Testimonial = {
@@ -17,20 +18,7 @@ export const testimonialsConfig = {
   showSection: false,
 };
 
-export const testimonials: Testimonial[] = [
-  // Example shape — keep enabled: false until real:
-  // {
-  //   id: "t1",
-  //   name: "Client Name",
-  //   role: "Role",
-  //   company: "Company",
-  //   feedback: "Permissioned quote only.",
-  //   category: "Web Development",
-  //   enabled: false,
-  // },
-];
-
-export function getEnabledTestimonials() {
+export function getEnabledTestimonials(_locale: Locale): Testimonial[] {
   if (!testimonialsConfig.showSection) return [];
-  return testimonials.filter((t) => t.enabled);
+  return [];
 }

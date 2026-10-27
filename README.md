@@ -9,7 +9,16 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) (redirects to `/en` or `/ar`).
+
+### Languages
+
+The site is bilingual:
+
+- English: `/en`
+- Arabic (RTL): `/ar`
+
+Use the **English / العربية** switcher in the navbar. UI strings live in `src/i18n/ui.ts`. Page content is localized in `src/content/*` via `getX(locale)` helpers.
 
 ```bash
 npm run build

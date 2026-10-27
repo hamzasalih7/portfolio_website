@@ -6,17 +6,30 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { GitHubIcon } from "@/components/icons/BrandIcons";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { getProjectBySlug, projects } from "@/content/projects";
+import {
+  getAllProjectSlugs,
+  getProjectBySlug,
+} from "@/content/projects";
+import { isLocale, locales, type Locale } from "@/i18n/config";
+import { localePath } from "@/i18n/path";
+import { getUI } from "@/i18n/ui";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  const params: { locale: string; slug: string }[] = [];
+  for (const locale of locales) {
+    for (const slug of getAllProjectSlugs()) {
+      params.push({ locale, slug });
+    }
+  }
+  return params;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const { locale: raw, slug } = await params;
+  const locale: Locale = isLocale(raw) ? raw : "en";
+  const project = getProjectBySlug(locale, slug);
   if (!project) return {};
   return {
     title: project.title,
@@ -25,8 +38,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProjectCaseStudyPage({ params }: Props) {
-  const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const { locale: raw, slug } = await params;
+  if (!isLocale(raw)) notFound();
+  const locale = raw;
+  const ui = getUI(locale);
+  const project = getProjectBySlug(locale, slug);
   if (!project) notFound();
 
   return (
@@ -34,11 +50,13 @@ export default async function ProjectCaseStudyPage({ params }: Props) {
       <section className="border-b border-border py-16 sm:py-20">
         <Container className="max-w-4xl">
           <Link
-            href="/projects"
+            href={localePath(locale, "/projects")}
             className="inline-flex items-center gap-2 text-sm text-muted hover:text-accent"
           >
-            <ArrowLeft className="h-4 w-4" />
-            All projects
+            <ArrowLeft
+              className={`h-4 w-4 ${locale === "ar" ? "rotate-180" : ""}`}
+            />
+            {ui.allProjects}
           </Link>
           <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             {project.category}
@@ -60,21 +78,25 @@ export default async function ProjectCaseStudyPage({ params }: Props) {
           <div className="mt-8 flex flex-wrap gap-3">
             {project.liveUrl ? (
               <Button
-                href={project.liveUrl}
+                href={
+                  project.liveUrl === "/"
+                    ? localePath(locale, "/")
+                    : project.liveUrl
+                }
                 external={project.liveUrl.startsWith("http")}
               >
                 <ExternalLink className="h-4 w-4" />
-                Live demo
+                {ui.liveDemo}
               </Button>
             ) : null}
             {project.githubUrl ? (
               <Button href={project.githubUrl} variant="secondary" external>
                 <GitHubIcon className="h-4 w-4" />
-                Source code
+                {ui.sourceCode}
               </Button>
             ) : null}
-            <Button href="/contact" variant="outline">
-              Discuss a similar project
+            <Button href={localePath(locale, "/contact")} variant="outline">
+              {ui.discussSimilar}
             </Button>
           </div>
         </Container>
@@ -94,33 +116,35 @@ export default async function ProjectCaseStudyPage({ params }: Props) {
 
         <div className="space-y-10">
           <section>
-            <h2 className="font-display text-2xl font-semibold text-white">Overview</h2>
+            <h2 className="font-display text-2xl font-semibold text-white">
+              {ui.overview}
+            </h2>
             <p className="mt-3 leading-relaxed text-soft">{project.overview}</p>
           </section>
           {project.context ? (
             <section>
               <h2 className="font-display text-2xl font-semibold text-white">
-                Context
+                {ui.context}
               </h2>
               <p className="mt-3 leading-relaxed text-soft">{project.context}</p>
             </section>
           ) : null}
           <section>
             <h2 className="font-display text-2xl font-semibold text-white">
-              Challenge
+              {ui.challenge}
             </h2>
             <p className="mt-3 leading-relaxed text-soft">{project.challenge}</p>
           </section>
           <section>
             <h2 className="font-display text-2xl font-semibold text-white">
-              Solution & implementation
+              {ui.solution}
             </h2>
             <p className="mt-3 leading-relaxed text-soft">{project.solution}</p>
           </section>
           {project.architectureNotes ? (
             <section>
               <h2 className="font-display text-2xl font-semibold text-white">
-                Architecture / workflow notes
+                {ui.architecture}
               </h2>
               <p className="mt-3 leading-relaxed text-soft">
                 {project.architectureNotes}
@@ -130,7 +154,7 @@ export default async function ProjectCaseStudyPage({ params }: Props) {
           {project.results && project.results.length > 0 ? (
             <section>
               <h2 className="font-display text-2xl font-semibold text-white">
-                Results
+                {ui.results}
               </h2>
               <ul className="mt-3 space-y-2">
                 {project.results.map((r) => (

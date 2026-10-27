@@ -1,6 +1,4 @@
-/**
- * Professional experience — sourced from HamzaSalih_DevOps_CV.pdf
- */
+import type { Locale } from "@/i18n/config";
 
 export type ExperienceItem = {
   id: string;
@@ -15,7 +13,39 @@ export type ExperienceItem = {
   achievements?: string[];
 };
 
-export const experience: ExperienceItem[] = [
+const technologiesByRole: Record<string, string[]> = {
+  smsami: [
+    "AWS",
+    "Lambda",
+    "API Gateway",
+    "EC2",
+    "VPC",
+    "S3",
+    "RDS",
+    "CloudFront",
+    "Jenkins",
+    "AWS CodePipeline",
+    "Terraform",
+    "CloudFormation",
+    "CloudWatch",
+    "CloudTrail",
+    "X-Ray",
+    "IAM Identity Center",
+    "Linux",
+    "Nginx",
+    "Apache",
+    "WordPress",
+  ],
+  "evamp-saanga": [
+    "Linux",
+    "Networking",
+    "Virtualization",
+    "Monitoring",
+    "Cloud Infrastructure",
+  ],
+};
+
+const en: ExperienceItem[] = [
   {
     id: "smsami",
     title: "DevOps Engineer / Cloud Engineer",
@@ -36,28 +66,7 @@ export const experience: ExperienceItem[] = [
       "Executed Linux server hardening, system performance monitoring, log analysis, and ongoing optimization initiatives.",
       "Facilitated the migration of legacy applications and websites to WordPress and cloud-native architectures.",
     ],
-    technologies: [
-      "AWS",
-      "Lambda",
-      "API Gateway",
-      "EC2",
-      "VPC",
-      "S3",
-      "RDS",
-      "CloudFront",
-      "Jenkins",
-      "AWS CodePipeline",
-      "Terraform",
-      "CloudFormation",
-      "CloudWatch",
-      "CloudTrail",
-      "X-Ray",
-      "IAM Identity Center",
-      "Linux",
-      "Nginx",
-      "Apache",
-      "WordPress",
-    ],
+    technologies: technologiesByRole.smsami,
   },
   {
     id: "evamp-saanga",
@@ -72,12 +81,50 @@ export const experience: ExperienceItem[] = [
       "Contributed to the troubleshooting of networking and cloud infrastructure challenges.",
       "Acquired practical experience with networking protocols, infrastructure deployment methodologies, and microservices architecture patterns.",
     ],
-    technologies: [
-      "Linux",
-      "Networking",
-      "Virtualization",
-      "Monitoring",
-      "Cloud Infrastructure",
-    ],
+    technologies: technologiesByRole["evamp-saanga"],
   },
 ];
+
+const ar: ExperienceItem[] = [
+  {
+    id: "smsami",
+    title: "مهندس DevOps / مهندس سحابة",
+    company: "SMSAMI Inc.",
+    location: "بيشاور، باكستان",
+    start: "يونيو 2022",
+    end: "فبراير 2026",
+    responsibilities: [
+      "تصميم ونشر خدمات مصغّرة بدون خادم قابلة للتوسع باستخدام AWS Lambda وAPI Gateway.",
+      "بناء وصيانة بنية AWS سحابية آمنة تشمل EC2 وVPC وS3 وRDS وCloudFront.",
+      "إدارة خوادم Linux (Ubuntu وAmazon Linux وCentOS) بما في ذلك الإعداد والتصحيح وإدارة المستخدمين وحل المشكلات.",
+      "تهيئة وتحسين خوادم Apache وNginx بما في ذلك الوكيل العكسي وإعداد SSL/TLS وتحسين الأداء.",
+      "إنشاء خطوط CI/CD باستخدام Jenkins وAWS CodePipeline لأتمتة نشر التطبيقات وتبسيط سير العمل.",
+      "إدارة AWS Organizations وتطبيق AWS IAM Identity Center (SSO) عبر حسابات متعددة للتحكم المركزي في الوصول.",
+      "تصميم بنى عالية التوفر ومتحملة للأعطال عبر مناطق AWS متعددة لدعم التعافي من الكوارث.",
+      "إنشاء مراقبة وتسجيل وتتبع شامل باستخدام CloudWatch وCloudTrail وAWS X-Ray لاكتشاف المشكلات في بيئات الإنتاج.",
+      "أتمتة توفير البنية التحتية وإعدادها باستخدام AWS CloudFormation وTerraform لتحسين الاتساق وتقليل الجهد.",
+      "تنفيذ تعزيز أمان خوادم Linux ومراقبة الأداء وتحليل السجلات ومبادرات التحسين المستمر.",
+      "المساهمة في ترحيل التطبيقات والمواقع القديمة إلى WordPress وبُنى سحابية أصلية.",
+    ],
+    technologies: technologiesByRole.smsami,
+  },
+  {
+    id: "evamp-saanga",
+    title: "متدرب مهندس شبكات",
+    company: "Evamp & Saanga",
+    location: "إسلام آباد، باكستان",
+    start: "فبراير 2022",
+    end: "مايو 2022",
+    responsibilities: [
+      "المساهمة في إعداد وتهيئة ومحاكاة خوادم Linux.",
+      "مراقبة سجلات الخوادم ومؤشرات الأداء وصحة البنية الشبكية.",
+      "المشاركة في استكشاف أعطال الشبكات والبنية السحابية وحلها.",
+      "اكتساب خبرة عملية في بروتوكولات الشبكات ومنهجيات نشر البنية وأنماط الخدمات المصغّرة.",
+    ],
+    technologies: technologiesByRole["evamp-saanga"],
+  },
+];
+
+export function getExperience(locale: Locale) {
+  return locale === "ar" ? ar : en;
+}

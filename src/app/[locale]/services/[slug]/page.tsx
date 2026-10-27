@@ -6,21 +6,31 @@ import { Suspense } from "react";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { profile } from "@/content/profile";
+import { getProfile } from "@/content/profile";
 import { getProjectsByIds } from "@/content/projects";
-import { getEnabledServices, getServiceBySlug } from "@/content/services";
+import { getAllServiceSlugs, getServiceBySlug } from "@/content/services";
+import { isLocale, locales, type Locale } from "@/i18n/config";
+import { localePath } from "@/i18n/path";
+import { getUI } from "@/i18n/ui";
 import { ServiceIcon } from "@/lib/icons";
 import { whatsappUrl } from "@/lib/utils";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ locale: string; slug: string }> };
 
 export async function generateStaticParams() {
-  return getEnabledServices().map((s) => ({ slug: s.slug }));
+  const params: { locale: string; slug: string }[] = [];
+  for (const locale of locales) {
+    for (const slug of getAllServiceSlugs()) {
+      params.push({ locale, slug });
+    }
+  }
+  return params;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const { locale: raw, slug } = await params;
+  const locale: Locale = isLocale(raw) ? raw : "en";
+  const service = getServiceBySlug(locale, slug);
   if (!service) return {};
   return {
     title: service.title,
@@ -29,14 +39,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
-  const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const { locale: raw, slug } = await params;
+  if (!isLocale(raw)) notFound();
+  const locale = raw;
+  const ui = getUI(locale);
+  const profile = getProfile(locale);
+  const service = getServiceBySlug(locale, slug);
   if (!service) notFound();
 
-  const related = getProjectsByIds(service.relatedProjectIds);
+  const related = getProjectsByIds(locale, service.relatedProjectIds);
   const wa = whatsappUrl(
     profile.phoneE164,
-    `Hello Hamza, I’m interested in your ${service.title} service and would like to discuss a project.`,
+    locale === "ar"
+      ? `مرحباً حمزة، أنا مهتم بخدمة ${service.title} وأود مناقشة مشروع.`
+      : `Hello Hamza, I’m interested in your ${service.title} service and would like to discuss a project.`,
   );
 
   return (
@@ -47,7 +63,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             <ServiceIcon name={service.icon} className="h-6 w-6" />
           </div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            Service
+            {ui.serviceEyebrow}
           </p>
           <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
             {service.title}
@@ -56,12 +72,17 @@ export default async function ServiceDetailPage({ params }: Props) {
             {service.shortDescription}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button href={`/contact?service=${encodeURIComponent(service.title)}`}>
-              Request a Quote
+            <Button
+              href={localePath(
+                locale,
+                `/contact?service=${encodeURIComponent(service.title)}`,
+              )}
+            >
+              {ui.requestQuote}
             </Button>
             <Button href={wa} variant="outline" external>
               <MessageCircle className="h-4 w-4" />
-              WhatsApp
+              {ui.whatsapp}
             </Button>
           </div>
         </Container>
@@ -71,14 +92,14 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="space-y-10">
           <section>
             <h2 className="font-display text-2xl font-semibold text-white">
-              Business problem addressed
+              {ui.businessProblem}
             </h2>
-            <p className="mt-3 text-soft leading-relaxed">{service.problem}</p>
+            <p className="mt-3 leading-relaxed text-soft">{service.problem}</p>
           </section>
 
           <section>
             <h2 className="font-display text-2xl font-semibold text-white">
-              What is included
+              {ui.whatIncluded}
             </h2>
             <ul className="mt-4 space-y-2">
               {service.deliverables.map((item) => (
@@ -92,7 +113,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
           <section>
             <h2 className="font-display text-2xl font-semibold text-white">
-              Typical project workflow
+              {ui.typicalWorkflow}
             </h2>
             <ol className="mt-4 space-y-3">
               {service.workflow.map((step, i) => (
@@ -109,7 +130,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           {service.faqs.length > 0 ? (
             <section>
               <h2 className="font-display text-2xl font-semibold text-white">
-                Frequently asked questions
+                {ui.frequentlyAsked}
               </h2>
               <div className="mt-4 space-y-3">
                 {service.faqs.map((faq) => (
@@ -127,13 +148,13 @@ export default async function ServiceDetailPage({ params }: Props) {
           {related.length > 0 ? (
             <section>
               <h2 className="font-display text-2xl font-semibold text-white">
-                Relevant portfolio projects
+                {ui.relevantProjects}
               </h2>
               <ul className="mt-4 space-y-3">
                 {related.map((p) => (
                   <li key={p.id}>
                     <Link
-                      href={`/projects/${p.slug}`}
+                      href={localePath(locale, `/projects/${p.slug}`)}
                       className="card-surface block p-4 transition hover:border-accent/30"
                     >
                       <p className="font-medium text-white">{p.title}</p>
@@ -149,12 +170,9 @@ export default async function ServiceDetailPage({ params }: Props) {
         <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
           <div className="card-surface p-5">
             <h2 className="font-display text-lg font-semibold text-white">
-              Request a quote
+              {ui.requestQuote}
             </h2>
-            <p className="mt-2 text-sm text-muted">
-              Pricing depends on scope. No fixed prices or guaranteed delivery dates until
-              requirements are defined.
-            </p>
+            <p className="mt-2 text-sm text-muted">{ui.quoteNote}</p>
           </div>
           <Suspense fallback={<div className="card-surface h-64 animate-pulse" />}>
             <ContactForm />

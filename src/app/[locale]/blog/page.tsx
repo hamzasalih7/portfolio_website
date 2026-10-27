@@ -1,31 +1,44 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getPublishedPosts } from "@/content/blog";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getPublishedPosts } from "@/content/blog";
+import { isLocale, type Locale } from "@/i18n/config";
+import { localePath } from "@/i18n/path";
+import { getUI } from "@/i18n/ui";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "Practical articles on AWS, DevOps, web development, cloud deployment, and technology tutorials by Hamza Salih.",
-};
+type Props = { params: Promise<{ locale: string }> };
 
-export default function BlogPage() {
-  const posts = getPublishedPosts();
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale: raw } = await params;
+  const locale: Locale = isLocale(raw) ? raw : "en";
+  const ui = getUI(locale);
+  return {
+    title: ui.blog,
+    description: ui.blogBody,
+  };
+}
+
+export default async function BlogPage({ params }: Props) {
+  const { locale: raw } = await params;
+  if (!isLocale(raw)) return null;
+  const locale = raw;
+  const ui = getUI(locale);
+  const posts = getPublishedPosts(locale);
 
   return (
     <section className="py-16 sm:py-20">
       <Container>
         <SectionHeading
-          eyebrow="Blog"
-          title="Notes on cloud, DevOps & the web"
-          description="Introductory, practical writing. Claims stay within verified general guidance — refine articles as you publish."
+          eyebrow={ui.blog}
+          title={ui.blogTitle}
+          description={ui.blogBody}
         />
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <Link
               key={post.id}
-              href={`/blog/${post.slug}`}
+              href={localePath(locale, `/blog/${post.slug}`)}
               className="card-surface flex flex-col p-6 transition hover:border-accent/30"
             >
               <p className="text-xs font-medium uppercase tracking-wider text-accent">

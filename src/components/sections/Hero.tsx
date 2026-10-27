@@ -5,12 +5,16 @@ import { useState } from "react";
 import { ArrowRight, MapPin } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { LinkedInIcon } from "@/components/icons/BrandIcons";
-import { profile } from "@/content/profile";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { getProfile } from "@/content/profile";
+import { localePath } from "@/i18n/path";
 
 export function Hero() {
+  const { locale, ui, dir } = useLocale();
+  const profile = getProfile(locale);
   const reduce = useReducedMotion();
   const [imgError, setImgError] = useState(false);
 
@@ -62,12 +66,12 @@ export function Hero() {
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button href="/#projects" size="lg">
-              Explore My Work
-              <ArrowRight className="h-4 w-4" />
+            <Button href={localePath(locale, "/#projects")} size="lg">
+              {ui.exploreWork}
+              <ArrowRight className={`h-4 w-4 ${dir === "rtl" ? "rotate-180" : ""}`} />
             </Button>
-            <Button href="/contact" variant="secondary" size="lg">
-              Discuss Your Project
+            <Button href={localePath(locale, "/contact")} variant="secondary" size="lg">
+              {ui.discussProject}
             </Button>
           </div>
 
@@ -75,10 +79,10 @@ export function Hero() {
             href={profile.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 text-sm text-muted transition hover:text-accent focus-ring rounded"
+            className="mt-5 inline-flex items-center gap-2 rounded text-sm text-muted transition hover:text-accent focus-ring"
           >
             <LinkedInIcon className="h-4 w-4" />
-            View LinkedIn profile
+            {ui.viewLinkedIn}
           </a>
         </motion.div>
 
@@ -107,23 +111,18 @@ export function Hero() {
                     {profile.monogram}
                   </div>
                   <p className="text-sm text-soft">{profile.name}</p>
-                  <p className="max-w-[220px] text-xs text-muted">
-                    Upload your portrait to{" "}
-                    <code className="text-accent">public/images/hamza-salih.jpg</code>{" "}
-                    and update <code className="text-accent">profile.ts</code>
-                  </p>
                 </div>
               )}
             </div>
             <div className="mt-4 flex items-center justify-between gap-3 px-1 pb-1">
               <div>
                 <p className="font-display text-sm font-semibold text-white">
-                  Technology Consultant
+                  {ui.technologyConsultant}
                 </p>
                 <p className="text-xs text-muted">{profile.location}</p>
               </div>
               <span className="rounded-lg border border-border px-2.5 py-1 text-[11px] text-soft">
-                Riyadh · Remote
+                {ui.riyadhRemote}
               </span>
             </div>
           </div>

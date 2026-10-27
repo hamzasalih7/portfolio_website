@@ -1,14 +1,15 @@
 import type { MetadataRoute } from "next";
-import { getPublishedPosts } from "@/content/blog";
-import { projects } from "@/content/projects";
-import { getEnabledServices } from "@/content/services";
+import { getAllPostSlugs } from "@/content/blog";
+import { getAllProjectSlugs } from "@/content/projects";
+import { getAllServiceSlugs } from "@/content/services";
 import { siteConfig } from "@/content/site";
+import { locales } from "@/i18n/config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
   const lastModified = "2026-10-27";
 
-  const staticRoutes = [
+  const staticPaths = [
     "",
     "/services",
     "/projects",
@@ -16,33 +17,47 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/blog",
     "/privacy",
     "/terms",
-  ].map((path) => ({
-    url: `${base}${path}`,
-    lastModified,
-    changeFrequency: "monthly" as const,
-    priority: path === "" ? 1 : 0.7,
-  }));
+  ];
 
-  const serviceRoutes = getEnabledServices().map((s) => ({
-    url: `${base}/services/${s.slug}`,
-    lastModified,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
+  const entries: MetadataRoute.Sitemap = [];
 
-  const projectRoutes = projects.map((p) => ({
-    url: `${base}/projects/${p.slug}`,
-    lastModified,
-    changeFrequency: "monthly" as const,
-    priority: 0.75,
-  }));
+  for (const locale of locales) {
+    for (const path of staticPaths) {
+      entries.push({
+        url: `${base}/${locale}${path}`,
+        lastModified,
+        changeFrequency: "monthly",
+        priority: path === "" ? 1 : 0.7,
+      });
+    }
 
-  const blogRoutes = getPublishedPosts().map((p) => ({
-    url: `${base}/blog/${p.slug}`,
-    lastModified: p.publishedAt,
-    changeFrequency: "monthly" as const,
-    priority: 0.6,
-  }));
+    for (const slug of getAllServiceSlugs()) {
+      entries.push({
+        url: `${base}/${locale}/services/${slug}`,
+        lastModified,
+        changeFrequency: "monthly",
+        priority: 0.8,
+      });
+    }
 
-  return [...staticRoutes, ...serviceRoutes, ...projectRoutes, ...blogRoutes];
+    for (const slug of getAllProjectSlugs()) {
+      entries.push({
+        url: `${base}/${locale}/projects/${slug}`,
+        lastModified,
+        changeFrequency: "monthly",
+        priority: 0.75,
+      });
+    }
+
+    for (const slug of getAllPostSlugs()) {
+      entries.push({
+        url: `${base}/${locale}/blog/${slug}`,
+        lastModified,
+        changeFrequency: "monthly",
+        priority: 0.6,
+      });
+    }
+  }
+
+  return entries;
 }

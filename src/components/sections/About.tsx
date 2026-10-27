@@ -1,19 +1,31 @@
+"use client";
+
 import { Download, MapPin } from "lucide-react";
-import { profile } from "@/content/profile";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getProfile } from "@/content/profile";
 
 export function About() {
+  const { locale, ui } = useLocale();
+  const profile = getProfile(locale);
+
   return (
     <section id="about" className="scroll-mt-24 py-20 sm:py-24">
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="About"
-            title="Professional summary"
-            description="DevOps and cloud engineering background with hands-on AWS, CI/CD, and Linux operations experience."
+            eyebrow={ui.about}
+            title={
+              locale === "ar" ? "الملخص المهني" : "Professional summary"
+            }
+            description={
+              locale === "ar"
+                ? "خلفية في DevOps وهندسة السحابة مع خبرة عملية في AWS وCI/CD وعمليات Linux."
+                : "DevOps and cloud engineering background with hands-on AWS, CI/CD, and Linux operations experience."
+            }
           />
         </Reveal>
 
@@ -42,7 +54,7 @@ export function About() {
             <Reveal delay={0.05}>
               <div className="card-surface p-6">
                 <h3 className="font-display text-sm font-semibold text-white">
-                  Location
+                  {ui.location}
                 </h3>
                 <p className="mt-3 flex items-center gap-2 text-sm text-soft">
                   <MapPin className="h-4 w-4 text-accent" />
@@ -54,7 +66,7 @@ export function About() {
             <Reveal delay={0.08}>
               <div className="card-surface p-6">
                 <h3 className="font-display text-sm font-semibold text-white">
-                  Core expertise
+                  {ui.coreExpertise}
                 </h3>
                 <ul className="mt-3 space-y-2">
                   {profile.about.interests.map((item) => (
@@ -70,7 +82,7 @@ export function About() {
             <Reveal delay={0.1}>
               <div className="card-surface p-6">
                 <h3 className="font-display text-sm font-semibold text-white">
-                  Education
+                  {ui.education}
                 </h3>
                 <ul className="mt-3 space-y-4">
                   {profile.about.education.map((edu) => (
@@ -87,7 +99,7 @@ export function About() {
             <Reveal delay={0.12}>
               <div className="card-surface p-6">
                 <h3 className="font-display text-sm font-semibold text-white">
-                  Certifications & training
+                  {ui.certifications}
                 </h3>
                 <ul className="mt-3 space-y-2">
                   {profile.about.certifications.map((item) => (
@@ -103,7 +115,7 @@ export function About() {
             <Reveal delay={0.14}>
               <div className="card-surface p-6">
                 <h3 className="font-display text-sm font-semibold text-white">
-                  Languages
+                  {ui.languages}
                 </h3>
                 <ul className="mt-3 space-y-2">
                   {profile.about.languages.map((lang) => (

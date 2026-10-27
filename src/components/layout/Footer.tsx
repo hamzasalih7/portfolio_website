@@ -1,15 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import { Mail, MessageCircle } from "lucide-react";
 import { LinkedInIcon } from "@/components/icons/BrandIcons";
-import { profile } from "@/content/profile";
-import { siteConfig } from "@/content/site";
-import { getEnabledServices } from "@/content/services";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Container } from "@/components/ui/Container";
+import { getProfile } from "@/content/profile";
+import { getEnabledServices } from "@/content/services";
+import { getNav } from "@/content/site";
+import { localePath } from "@/i18n/path";
 import { whatsappUrl } from "@/lib/utils";
 
 export function Footer() {
+  const { locale, ui } = useLocale();
+  const profile = getProfile(locale);
   const year = 2026;
-  const services = getEnabledServices().slice(0, 5);
+  const services = getEnabledServices(locale).slice(0, 5);
+  const nav = getNav(locale);
   const wa = whatsappUrl(profile.phoneE164, profile.whatsappPrefill);
 
   return (
@@ -23,15 +30,16 @@ export function Footer() {
             <span className="font-display font-semibold text-white">{profile.name}</span>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            Cloud, DevOps, web development, and practical technology services based in{" "}
-            {profile.location}.
+            {locale === "ar"
+              ? `السحابة وDevOps وتطوير الويب والخدمات التقنية العملية من ${profile.location}.`
+              : `Cloud, DevOps, web development, and practical technology services based in ${profile.location}.`}
           </p>
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold text-white">Navigate</h3>
+          <h3 className="text-sm font-semibold text-white">{ui.navigate}</h3>
           <ul className="mt-4 space-y-2">
-            {siteConfig.nav.map((item) => (
+            {nav.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="text-sm text-muted hover:text-accent">
                   {item.label}
@@ -39,20 +47,23 @@ export function Footer() {
               </li>
             ))}
             <li>
-              <Link href="/blog" className="text-sm text-muted hover:text-accent">
-                Blog
+              <Link
+                href={localePath(locale, "/blog")}
+                className="text-sm text-muted hover:text-accent"
+              >
+                {ui.blog}
               </Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold text-white">Services</h3>
+          <h3 className="text-sm font-semibold text-white">{ui.services}</h3>
           <ul className="mt-4 space-y-2">
             {services.map((s) => (
               <li key={s.id}>
                 <Link
-                  href={`/services/${s.slug}`}
+                  href={localePath(locale, `/services/${s.slug}`)}
                   className="text-sm text-muted hover:text-accent"
                 >
                   {s.title}
@@ -60,15 +71,18 @@ export function Footer() {
               </li>
             ))}
             <li>
-              <Link href="/services" className="text-sm text-accent hover:underline">
-                View all services
+              <Link
+                href={localePath(locale, "/services")}
+                className="text-sm text-accent hover:underline"
+              >
+                {ui.viewAllServices}
               </Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold text-white">Contact</h3>
+          <h3 className="text-sm font-semibold text-white">{ui.contact}</h3>
           <ul className="mt-4 space-y-3 text-sm text-muted">
             <li>
               <a
@@ -98,7 +112,7 @@ export function Footer() {
                 className="inline-flex items-center gap-2 hover:text-accent"
               >
                 <LinkedInIcon className="h-4 w-4 shrink-0" />
-                LinkedIn
+                {ui.linkedin}
               </a>
             </li>
           </ul>
@@ -108,14 +122,14 @@ export function Footer() {
       <div className="border-t border-border">
         <Container className="flex flex-col gap-3 py-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {profile.name}. All rights reserved.
+            © {year} {profile.name}. {ui.rightsReserved}
           </p>
           <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-accent">
-              Privacy Policy
+            <Link href={localePath(locale, "/privacy")} className="hover:text-accent">
+              {ui.privacyPolicy}
             </Link>
-            <Link href="/terms" className="hover:text-accent">
-              Terms of Service
+            <Link href={localePath(locale, "/terms")} className="hover:text-accent">
+              {ui.termsOfService}
             </Link>
           </div>
         </Container>

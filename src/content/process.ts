@@ -1,4 +1,6 @@
-export const workProcess = [
+import type { Locale } from "@/i18n/config";
+
+const en = [
   {
     step: 1,
     title: "Discovery",
@@ -24,3 +26,34 @@ export const workProcess = [
       "Deploy the final solution and provide the agreed handover or maintenance support.",
   },
 ] as const;
+
+const ar = [
+  {
+    step: 1,
+    title: "الاكتشاف",
+    description:
+      "فهم أهداف العميل ومتطلباته وميزانيته حتى يبدأ التعاون بتوقعات واضحة.",
+  },
+  {
+    step: 2,
+    title: "التخطيط",
+    description:
+      "تحديد النطاق والتقنيات والمخرجات والجدول الزمني قبل بدء التنفيذ.",
+  },
+  {
+    step: 3,
+    title: "التنفيذ",
+    description:
+      "بناء الحل وتهيئته واختباره ومراجعته مع مساحة للملاحظات والتحسين.",
+  },
+  {
+    step: 4,
+    title: "الإطلاق والدعم",
+    description:
+      "نشر الحل النهائي وتقديم التسليم المتفق عليه أو دعم الصيانة.",
+  },
+] as const;
+
+export function getWorkProcess(locale: Locale) {
+  return locale === "ar" ? ar : en;
+}

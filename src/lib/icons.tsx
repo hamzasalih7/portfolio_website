@@ -8,7 +8,7 @@ import {
   PackagePlus,
   Store,
 } from "lucide-react";
-import type { Service } from "@/content/services";
+import type { ServiceIconName } from "@/content/services";
 
 const map = {
   globe: Globe,
@@ -25,7 +25,7 @@ export function ServiceIcon({
   name,
   className,
 }: {
-  name: Service["icon"];
+  name: ServiceIconName;
   className?: string;
 }) {
   const Icon = map[name] ?? PackagePlus;

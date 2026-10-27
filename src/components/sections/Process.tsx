@@ -1,17 +1,27 @@
-import { workProcess } from "@/content/process";
+"use client";
+
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getWorkProcess } from "@/content/process";
 
 export function Process() {
+  const { locale, ui } = useLocale();
+  const workProcess = getWorkProcess(locale);
+
   return (
     <section id="process" className="scroll-mt-24 py-20 sm:py-24">
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="How I work"
-            title="A clear, professional process"
-            description="Four steps from discovery to launch — designed to keep scope, communication, and delivery aligned."
+            eyebrow={ui.howIWork}
+            title={ui.processTitle}
+            description={
+              locale === "ar"
+                ? "أربع خطوات من الاكتشاف إلى الإطلاق — للحفاظ على توافق النطاق والتواصل والتسليم."
+                : "Four steps from discovery to launch — designed to keep scope, communication, and delivery aligned."
+            }
             align="center"
             className="mx-auto"
           />
@@ -30,12 +40,6 @@ export function Process() {
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {step.description}
                 </p>
-                {i < workProcess.length - 1 ? (
-                  <span
-                    className="pointer-events-none absolute -right-3 top-1/2 hidden h-px w-6 bg-border xl:block"
-                    aria-hidden
-                  />
-                ) : null}
               </li>
             </Reveal>
           ))}

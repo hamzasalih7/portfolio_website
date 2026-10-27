@@ -1,22 +1,35 @@
-import { experience } from "@/content/experience";
-import { skillCategories } from "@/content/skills";
+"use client";
+
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getExperience } from "@/content/experience";
+import { getSkillCategories } from "@/content/skills";
 
 export function Experience() {
+  const { locale, ui } = useLocale();
+  const experience = getExperience(locale);
+  const skillCategories = getSkillCategories(locale);
+
   return (
     <section id="experience" className="scroll-mt-24 py-20 sm:py-24">
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Experience"
-            title="Professional experience"
-            description="Roles and responsibilities sourced from the professional CV."
+            eyebrow={ui.experience}
+            title={
+              locale === "ar" ? "الخبرة المهنية" : "Professional experience"
+            }
+            description={
+              locale === "ar"
+                ? "الأدوار والمسؤوليات مستمدة من السيرة المهنية."
+                : "Roles and responsibilities sourced from the professional CV."
+            }
           />
         </Reveal>
 
-        <div className="relative mt-12 space-y-6 before:absolute before:left-[11px] before:top-3 before:hidden before:h-[calc(100%-24px)] before:w-px before:bg-border sm:before:block">
+        <div className="relative mt-12 space-y-6 before:absolute before:start-[11px] before:top-3 before:hidden before:h-[calc(100%-24px)] before:w-px before:bg-border sm:before:block">
           {experience.map((role, index) => (
             <Reveal key={role.id} delay={index * 0.05}>
               <article className="relative grid gap-4 sm:grid-cols-[24px_1fr] sm:gap-6">
@@ -31,7 +44,7 @@ export function Experience() {
                       </h3>
                       <p className="mt-1 text-sm text-accent">{role.company}</p>
                     </div>
-                    <div className="text-left text-sm text-muted sm:text-right">
+                    <div className="text-start text-sm text-muted sm:text-end">
                       <p>
                         {role.start} — {role.end}
                       </p>
@@ -47,21 +60,6 @@ export function Experience() {
                       </li>
                     ))}
                   </ul>
-
-                  {role.achievements && role.achievements.length > 0 ? (
-                    <div className="mt-5">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-                        Achievements
-                      </p>
-                      <ul className="mt-2 space-y-2">
-                        {role.achievements.map((item) => (
-                          <li key={item} className="text-sm text-soft">
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ) : null}
 
                   <div className="mt-5 flex flex-wrap gap-2">
                     {role.technologies.map((tech) => (
@@ -82,9 +80,13 @@ export function Experience() {
         <div id="skills" className="mt-20 scroll-mt-24">
           <Reveal>
             <SectionHeading
-              eyebrow="Skills"
-              title="Technical skills"
-              description="Grouped by capability. Proficiency percentages are intentionally omitted."
+              eyebrow={ui.technicalSkills}
+              title={ui.technicalSkills}
+              description={
+                locale === "ar"
+                  ? "مجمّعة حسب القدرة. نسب الإتقان غير مستخدمة عمداً."
+                  : "Grouped by capability. Proficiency percentages are intentionally omitted."
+              }
             />
           </Reveal>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

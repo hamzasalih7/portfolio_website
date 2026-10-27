@@ -1,10 +1,14 @@
-import { getEnabledTestimonials } from "@/content/testimonials";
+"use client";
+
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getEnabledTestimonials } from "@/content/testimonials";
 
 export function Testimonials() {
-  const items = getEnabledTestimonials();
+  const { locale } = useLocale();
+  const items = getEnabledTestimonials(locale);
   if (items.length === 0) return null;
 
   return (
@@ -12,9 +16,13 @@ export function Testimonials() {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Testimonials"
-            title="Client feedback"
-            description="Real, permissioned testimonials only."
+            eyebrow={locale === "ar" ? "آراء العملاء" : "Testimonials"}
+            title={locale === "ar" ? "ملاحظات العملاء" : "Client feedback"}
+            description={
+              locale === "ar"
+                ? "شهادات حقيقية بإذن أصحابها فقط."
+                : "Real, permissioned testimonials only."
+            }
           />
         </Reveal>
         <div className="mt-10 grid gap-5 md:grid-cols-2">
@@ -28,9 +36,6 @@ export function Testimonials() {
                     {t.role}
                     {t.company ? ` · ${t.company}` : ""}
                   </p>
-                  {t.category ? (
-                    <p className="mt-1 text-xs text-accent">{t.category}</p>
-                  ) : null}
                 </footer>
               </blockquote>
             </Reveal>

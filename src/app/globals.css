@@ -61,6 +61,20 @@ body {
   min-height: 100vh;
 }
 
+body.font-arabic {
+  font-family: var(--font-arabic), var(--font-plus-jakarta), system-ui, sans-serif;
+}
+
+body.font-arabic .font-display {
+  font-family: var(--font-arabic), var(--font-manrope), system-ui, sans-serif;
+}
+
+html[dir="rtl"] .gradient-text {
+  background: linear-gradient(225deg, #e2e8f0 0%, #22d3ee 55%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 ::selection {
   background: rgba(34, 211, 238, 0.28);
   color: #fff;

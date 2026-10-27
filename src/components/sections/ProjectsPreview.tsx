@@ -4,15 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
-import {
-  projectCategories,
-  projects,
-  type ProjectCategory,
-} from "@/content/projects";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import {
+  getProjectCategories,
+  getProjects,
+  type ProjectCategoryId,
+} from "@/content/projects";
+import { localePath } from "@/i18n/path";
 import { cn } from "@/lib/utils";
 
 export function ProjectsPreview({
@@ -22,46 +24,77 @@ export function ProjectsPreview({
   showAllLink?: boolean;
   limit?: number;
 }) {
-  const [filter, setFilter] = useState<ProjectCategory | "All">("All");
+  const { locale, ui } = useLocale();
+  const projects = getProjects(locale);
+  const categories = getProjectCategories(locale);
+  const [filter, setFilter] = useState<ProjectCategoryId | "all">("all");
 
   const filtered = useMemo(() => {
     const list =
-      filter === "All" ? projects : projects.filter((p) => p.category === filter);
+      filter === "all"
+        ? projects
+        : projects.filter((p) => p.categoryId === filter);
     return typeof limit === "number" ? list.slice(0, limit) : list;
-  }, [filter, limit]);
+  }, [filter, limit, projects]);
 
   return (
     <section id="projects" className="scroll-mt-24 py-20 sm:py-24">
       <Container>
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
-            eyebrow="Projects"
-            title="Selected work"
-            description="Filterable portfolio cards. Add new entries in src/content/projects.ts without redesigning the site."
+            eyebrow={ui.projects}
+            title={ui.selectedWork}
+            description={
+              locale === "ar"
+                ? "بطاقات مشاريع قابلة للتصفية. أضف مشروعاً جديداً من ملفات المحتوى دون إعادة تصميم الموقع."
+                : "Filterable portfolio cards. Add new entries in content files without redesigning the site."
+            }
           />
           {showAllLink ? (
-            <Button href="/projects" variant="secondary" className="shrink-0 self-start sm:self-auto">
-              View all projects
+            <Button
+              href={localePath(locale, "/projects")}
+              variant="secondary"
+              className="shrink-0 self-start sm:self-auto"
+            >
+              {ui.viewAllProjects}
             </Button>
           ) : null}
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-2" role="tablist" aria-label="Project categories">
-          {(["All", ...projectCategories] as const).map((cat) => (
+        <div
+          className="mt-8 flex flex-wrap gap-2"
+          role="tablist"
+          aria-label={ui.projects}
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={filter === "all"}
+            onClick={() => setFilter("all")}
+            className={cn(
+              "rounded-lg border px-3 py-1.5 text-sm transition focus-ring",
+              filter === "all"
+                ? "border-accent/40 bg-accent-dim text-accent"
+                : "border-border text-muted hover:border-border-strong hover:text-soft",
+            )}
+          >
+            {locale === "ar" ? "الكل" : "All"}
+          </button>
+          {categories.map((cat) => (
             <button
-              key={cat}
+              key={cat.id}
               type="button"
               role="tab"
-              aria-selected={filter === cat}
-              onClick={() => setFilter(cat)}
+              aria-selected={filter === cat.id}
+              onClick={() => setFilter(cat.id)}
               className={cn(
                 "rounded-lg border px-3 py-1.5 text-sm transition focus-ring",
-                filter === cat
+                filter === cat.id
                   ? "border-accent/40 bg-accent-dim text-accent"
                   : "border-border text-muted hover:border-border-strong hover:text-soft",
               )}
             >
-              {cat}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -101,31 +134,25 @@ export function ProjectsPreview({
                   </div>
                   <div className="mt-5 flex flex-wrap items-center gap-3">
                     <Link
-                      href={`/projects/${project.slug}`}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline focus-ring rounded"
+                      href={localePath(locale, `/projects/${project.slug}`)}
+                      className="inline-flex items-center gap-1 rounded text-sm font-semibold text-accent hover:underline focus-ring"
                     >
-                      View Case Study
+                      {ui.viewCaseStudy}
                       <ArrowUpRight className="h-4 w-4" />
                     </Link>
                     {project.liveUrl ? (
                       <a
-                        href={project.liveUrl}
+                        href={
+                          project.liveUrl === "/"
+                            ? localePath(locale, "/")
+                            : project.liveUrl
+                        }
                         className="text-sm text-muted hover:text-soft"
                         {...(project.liveUrl.startsWith("http")
                           ? { target: "_blank", rel: "noopener noreferrer" }
                           : {})}
                       >
-                        Live
-                      </a>
-                    ) : null}
-                    {project.githubUrl ? (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-muted hover:text-soft"
-                      >
-                        GitHub
+                        {ui.live}
                       </a>
                     ) : null}
                   </div>
@@ -134,13 +161,6 @@ export function ProjectsPreview({
             </Reveal>
           ))}
         </div>
-
-        {filtered.length === 0 ? (
-          <p className="mt-10 text-center text-sm text-muted">
-            No projects in this category yet. Add one in{" "}
-            <code className="text-accent">src/content/projects.ts</code>.
-          </p>
-        ) : null}
       </Container>
     </section>
   );

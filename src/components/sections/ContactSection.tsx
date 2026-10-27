@@ -1,15 +1,20 @@
+"use client";
+
 import { Suspense } from "react";
 import { Mail, MessageCircle, MapPin } from "lucide-react";
 import { LinkedInIcon } from "@/components/icons/BrandIcons";
-import { profile } from "@/content/profile";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getProfile } from "@/content/profile";
 import { whatsappUrl } from "@/lib/utils";
 
 export function ContactSection() {
+  const { locale, ui } = useLocale();
+  const profile = getProfile(locale);
   const wa = whatsappUrl(profile.phoneE164, profile.whatsappPrefill);
 
   return (
@@ -17,9 +22,9 @@ export function ContactSection() {
       <Container>
         <Reveal>
           <SectionHeading
-            eyebrow="Contact"
-            title="Let’s discuss your project"
-            description="Prefer WhatsApp for a quick conversation, or send a structured inquiry below."
+            eyebrow={ui.contact}
+            title={ui.letsDiscuss}
+            description={ui.preferWhatsApp}
           />
         </Reveal>
 
@@ -32,7 +37,7 @@ export function ContactSection() {
               >
                 <Mail className="mt-0.5 h-5 w-5 text-accent" />
                 <div>
-                  <p className="text-sm font-semibold text-white">Email</p>
+                  <p className="text-sm font-semibold text-white">{ui.email}</p>
                   <p className="mt-1 text-sm text-muted">{profile.email}</p>
                 </div>
               </a>
@@ -44,7 +49,7 @@ export function ContactSection() {
               >
                 <MessageCircle className="mt-0.5 h-5 w-5 text-accent" />
                 <div>
-                  <p className="text-sm font-semibold text-white">WhatsApp</p>
+                  <p className="text-sm font-semibold text-white">{ui.whatsapp}</p>
                   <p className="mt-1 text-sm text-muted">{profile.phoneDisplay}</p>
                 </div>
               </a>
@@ -56,20 +61,20 @@ export function ContactSection() {
               >
                 <LinkedInIcon className="mt-0.5 h-5 w-5 text-accent" />
                 <div>
-                  <p className="text-sm font-semibold text-white">LinkedIn</p>
-                  <p className="mt-1 text-sm text-muted">Professional profile</p>
+                  <p className="text-sm font-semibold text-white">{ui.linkedin}</p>
+                  <p className="mt-1 text-sm text-muted">{ui.professionalProfile}</p>
                 </div>
               </a>
               <div className="card-surface flex items-start gap-3 p-5">
                 <MapPin className="mt-0.5 h-5 w-5 text-accent" />
                 <div>
-                  <p className="text-sm font-semibold text-white">Location</p>
+                  <p className="text-sm font-semibold text-white">{ui.location}</p>
                   <p className="mt-1 text-sm text-muted">{profile.location}</p>
                 </div>
               </div>
               <Button href={wa} variant="outline" className="w-full" external>
                 <MessageCircle className="h-4 w-4" />
-                Message on WhatsApp
+                {ui.messageWhatsApp}
               </Button>
             </div>
           </Reveal>
@@ -78,7 +83,7 @@ export function ContactSection() {
             <Suspense
               fallback={
                 <div className="card-surface h-96 animate-pulse p-8 text-sm text-muted">
-                  Loading form…
+                  {ui.loadingForm}
                 </div>
               }
             >

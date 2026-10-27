@@ -3,13 +3,20 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
-import { siteConfig } from "@/content/site";
-import { profile } from "@/content/profile";
+import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { getCta, getNav } from "@/content/site";
+import { getProfile } from "@/content/profile";
+import { localePath } from "@/i18n/path";
 import { cn, whatsappUrl } from "@/lib/utils";
 
 export function Navbar() {
+  const { locale, ui } = useLocale();
+  const profile = getProfile(locale);
+  const nav = getNav(locale);
+  const cta = getCta(locale);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -40,8 +47,8 @@ export function Navbar() {
     >
       <Container className="flex h-16 items-center justify-between gap-4 lg:h-[4.25rem]">
         <Link
-          href="/"
-          className="group flex items-center gap-2.5 focus-ring rounded-lg"
+          href={localePath(locale, "/")}
+          className="group flex items-center gap-2.5 rounded-lg focus-ring"
           aria-label={`${profile.name} home`}
         >
           <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-accent/30 bg-accent-dim font-display text-sm font-bold text-accent transition group-hover:border-accent/60">
@@ -52,8 +59,8 @@ export function Navbar() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-          {siteConfig.nav.map((item) => (
+        <nav className="hidden items-center gap-1 lg:flex" aria-label={ui.navAria}>
+          {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -65,31 +72,35 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <LanguageSwitcher />
           <a
             href={wa}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-soft transition hover:text-accent focus-ring"
-            aria-label="Chat on WhatsApp"
+            aria-label={ui.whatsappAria}
           >
             <MessageCircle className="h-4 w-4" />
-            WhatsApp
+            {ui.whatsapp}
           </a>
-          <Button href={siteConfig.cta.hire.href} size="sm">
-            {siteConfig.cta.hire.label}
+          <Button href={cta.hire.href} size="sm">
+            {cta.hire.label}
           </Button>
         </div>
 
-        <button
-          type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border text-soft hover:bg-white/5 focus-ring lg:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <LanguageSwitcher />
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border text-soft hover:bg-white/5 focus-ring"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? ui.closeMenu : ui.openMenu}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </Container>
 
       <div
@@ -100,7 +111,7 @@ export function Navbar() {
         )}
       >
         <Container className="flex flex-col gap-1 py-4">
-          {siteConfig.nav.map((item) => (
+          {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -113,14 +124,14 @@ export function Navbar() {
           <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
             <Button href={wa} variant="outline" external>
               <MessageCircle className="h-4 w-4" />
-              WhatsApp
+              {ui.whatsapp}
             </Button>
             <Link
-              href={siteConfig.cta.primary.href}
+              href={cta.primary.href}
               onClick={() => setOpen(false)}
               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-navy-950"
             >
-              {siteConfig.cta.primary.label}
+              {cta.primary.label}
             </Link>
           </div>
         </Container>

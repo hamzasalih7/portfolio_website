@@ -1,10 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getEnabledServices } from "@/content/services";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { getEnabledServices } from "@/content/services";
+import { localePath } from "@/i18n/path";
 import { ServiceIcon } from "@/lib/icons";
 
 export function Services({
@@ -14,7 +18,8 @@ export function Services({
   featuredOnly?: boolean;
   showViewAll?: boolean;
 }) {
-  const list = getEnabledServices().filter((s) =>
+  const { locale, ui, dir } = useLocale();
+  const list = getEnabledServices(locale).filter((s) =>
     featuredOnly ? s.featured : true,
   );
 
@@ -23,13 +28,17 @@ export function Services({
       <Container>
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
-            eyebrow="Services"
-            title="Freelance technology solutions"
-            description="Clear professional offerings for websites, e-commerce, cloud, hosting, and technical support — enable or disable each service in content."
+            eyebrow={ui.services}
+            title={ui.servicesPageTitle}
+            description={ui.servicesPageBody}
           />
           {showViewAll ? (
-            <Button href="/services" variant="secondary" className="shrink-0 self-start">
-              All services
+            <Button
+              href={localePath(locale, "/services")}
+              variant="secondary"
+              className="shrink-0 self-start"
+            >
+              {ui.allServices}
             </Button>
           ) : null}
         </div>
@@ -57,17 +66,22 @@ export function Services({
                 </ul>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Button
-                    href={`/contact?service=${encodeURIComponent(service.title)}`}
+                    href={localePath(
+                      locale,
+                      `/contact?service=${encodeURIComponent(service.title)}`,
+                    )}
                     size="sm"
                   >
-                    Request a Quote
+                    {ui.requestQuote}
                   </Button>
                   <Link
-                    href={`/services/${service.slug}`}
+                    href={localePath(locale, `/services/${service.slug}`)}
                     className="inline-flex items-center gap-1 self-center text-sm text-muted hover:text-accent"
                   >
-                    Details
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    {ui.details}
+                    <ArrowRight
+                      className={`h-3.5 w-3.5 ${dir === "rtl" ? "rotate-180" : ""}`}
+                    />
                   </Link>
                 </div>
               </article>
