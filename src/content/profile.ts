@@ -35,14 +35,14 @@ const copy = {
     supportingText:
       "I help businesses build professional websites, launch online stores, deploy reliable cloud infrastructure, and improve their digital operations through practical, scalable technology solutions.",
     about: {
-      summary: `I am a resourceful DevOps Engineer and Cloud Architect with 4 years of experience designing, implementing, and managing secure AWS cloud infrastructure. I enjoy helping businesses improve reliability, streamline deployments, strengthen their infrastructure, and establish a professional online presence.
+      summary: `I am a resourceful DevOps Engineer and Cloud Engineer with 5 years of experience designing, implementing, and managing secure AWS cloud infrastructure. I have a proven ability to develop scalable microservices, optimize Linux servers, and configure robust CI/CD pipelines using Jenkins, GitLab CI/CD, and AWS services — with strong expertise in infrastructure automation, production support, monitoring, and disaster recovery.
 
 My approach combines practical engineering, continuous improvement, and an understanding of business requirements. I aim to deliver solutions that are reliable, maintainable, secure, and aligned with each client's goals — from CI/CD and infrastructure as code to websites, hosting, and day-to-day technical support.`,
       interests: [
         "AWS cloud architecture & platform engineering",
-        "DevOps, CI/CD, and infrastructure automation",
-        "Kubernetes, Docker, and GitOps workflows",
-        "Site reliability, monitoring, and disaster recovery",
+        "DevOps, SRE, and production support",
+        "CI/CD (Jenkins, GitLab CI/CD) and infrastructure automation",
+        "Kubernetes, Docker, Ansible, and GitOps workflows",
         "Helping businesses launch and operate modern digital platforms",
       ],
       education: [
@@ -87,14 +87,14 @@ My approach combines practical engineering, continuous improvement, and an under
     supportingText:
       "أساعد الشركات على بناء مواقع احترافية، وإطلاق متاجر إلكترونية، ونشر بنية سحابية موثوقة، وتحسين عملياتها الرقمية عبر حلول تقنية عملية وقابلة للتوسع.",
     about: {
-      summary: `أنا مهندس DevOps ومهندس سحابة بخبرة 4 سنوات في تصميم وتنفيذ وإدارة بنية AWS السحابية الآمنة. أستمتع بمساعدة الشركات على تحسين الاعتمادية، وتبسيط عمليات النشر، وتقوية بنيتها التحتية، وبناء حضور رقمي احترافي.
+      summary: `أنا مهندس DevOps ومهندس سحابة بخبرة 5 سنوات في تصميم وتنفيذ وإدارة بنية AWS السحابية الآمنة. لدي قدرة مثبتة على تطوير خدمات مصغّرة قابلة للتوسع، وتحسين خوادم Linux، وتهيئة خطوط CI/CD باستخدام Jenkins وGitLab CI/CD وخدمات AWS — مع خبرة قوية في أتمتة البنية ودعم الإنتاج والمراقبة والتعافي من الكوارث.
 
 منهجي يجمع بين الهندسة العملية والتحسين المستمر وفهم متطلبات العمل. أسعى لتقديم حلول موثوقة وقابلة للصيانة وآمنة ومتوافقة مع أهداف كل عميل — من خطوط CI/CD والبنية كرمز إلى المواقع والاستضافة والدعم التقني اليومي.`,
       interests: [
         "هندسة بنية AWS وهندسة المنصات",
-        "DevOps وCI/CD وأتمتة البنية التحتية",
-        "Kubernetes وDocker وسير عمل GitOps",
-        "موثوقية الأنظمة والمراقبة والتعافي من الكوارث",
+        "DevOps وSRE ودعم الإنتاج",
+        "CI/CD (Jenkins وGitLab CI/CD) وأتمتة البنية التحتية",
+        "Kubernetes وDocker وAnsible وسير عمل GitOps",
         "مساعدة الشركات على إطلاق وتشغيل منصات رقمية حديثة",
       ],
       education: [
