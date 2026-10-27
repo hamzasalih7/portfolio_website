@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#0B1220"/>
+  <rect x="60" y="80" width="140" height="70" rx="14" fill="#1a2438" stroke="#22D3EE" stroke-opacity="0.4"/>
+  <rect x="260" y="80" width="140" height="70" rx="14" fill="#1a2438" stroke="#22D3EE" stroke-opacity="0.4"/>
+  <rect x="460" y="80" width="140" height="70" rx="14" fill="#1a2438" stroke="#22D3EE" stroke-opacity="0.4"/>
+  <path d="M200 115H260M400 115H460" stroke="#22D3EE" stroke-width="3"/>
+  <rect x="260" y="220" width="280" height="90" rx="16" fill="#151d2e" stroke="#38BDF8" stroke-opacity="0.5"/>
+  <path d="M330 150V220M430 150V220" stroke="#64748B" stroke-width="2" stroke-dasharray="6 6"/>
+  <text x="60" y="420" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">CI/CD Deployment Pipeline</text>
+</svg>

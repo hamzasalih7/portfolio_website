@@ -1,0 +1,10 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#0B1220"/>
+  <circle cx="980" cy="120" r="180" fill="#22D3EE" fill-opacity="0.08"/>
+  <circle cx="160" cy="520" r="200" fill="#3B82F6" fill-opacity="0.08"/>
+  <rect x="90" y="90" width="72" height="72" rx="18" fill="#22D3EE" fill-opacity="0.15" stroke="#22D3EE" stroke-opacity="0.5"/>
+  <text x="108" y="136" fill="#22D3EE" font-family="Arial, sans-serif" font-size="28" font-weight="700">HS</text>
+  <text x="90" y="240" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="64" font-weight="700">Hamza Salih</text>
+  <text x="90" y="300" fill="#94A3B8" font-family="Arial, sans-serif" font-size="28">Cloud &amp; DevOps Engineer · Web Developer</text>
+  <text x="90" y="360" fill="#64748B" font-family="Arial, sans-serif" font-size="22">Riyadh, Saudi Arabia</text>
+</svg>

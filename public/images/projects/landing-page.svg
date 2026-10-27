@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#0F172A"/>
+  <rect x="80" y="70" width="640" height="320" rx="20" fill="#151d2e" stroke="#22D3EE" stroke-opacity="0.3"/>
+  <rect x="120" y="120" width="300" height="22" rx="11" fill="#E2E8F0" fill-opacity="0.85"/>
+  <rect x="120" y="160" width="240" height="12" rx="6" fill="#94A3B8" fill-opacity="0.4"/>
+  <rect x="120" y="190" width="200" height="12" rx="6" fill="#94A3B8" fill-opacity="0.25"/>
+  <rect x="120" y="240" width="140" height="44" rx="12" fill="#22D3EE"/>
+  <text x="80" y="450" fill="#94A3B8" font-family="Arial, sans-serif" font-size="18">Business Landing Page</text>
+</svg>
